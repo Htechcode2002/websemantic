@@ -1,0 +1,93 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.org/university#> .
+
+# ==========================================
+# Phase 1: Ontology Definition
+# ==========================================
+ex:Student a owl:Class .
+ex:Course a owl:Class .
+ex:Topic a owl:Class .
+
+ex:hasInterest a owl:ObjectProperty ;
+    rdfs:domain ex:Student ;
+    rdfs:range ex:Topic .
+
+ex:coversTopic a owl:ObjectProperty ;
+    rdfs:domain ex:Course ;
+    rdfs:range ex:Topic .
+
+ex:hasCompleted a owl:ObjectProperty ;
+    rdfs:domain ex:Student ;
+    rdfs:range ex:Course .
+
+# ==========================================
+# Phase 2: Virtual Data Population (Mock Courses)
+# ==========================================
+
+# --- Topics (Interests) ---
+ex:SoftwareEngineering a ex:Topic ; rdfs:label "Software Engineering" .
+ex:ArtificialIntelligence a ex:Topic ; rdfs:label "Artificial Intelligence" .
+ex:DataScience a ex:Topic ; rdfs:label "Data Science" .
+ex:CyberSecurity a ex:Topic ; rdfs:label "Cyber Security" .
+ex:WebDevelopment a ex:Topic ; rdfs:label "Web Development" .
+ex:CloudComputing a ex:Topic ; rdfs:label "Cloud Computing" .
+ex:GameDevelopment a ex:Topic ; rdfs:label "Game Development" .
+
+# --- Courses ---
+ex:CS101 a ex:Course ;
+    rdfs:label "Programming Fundamentals" ;
+    ex:coversTopic ex:SoftwareEngineering .
+
+ex:CS102 a ex:Course ;
+    rdfs:label "Web Design Basics" ;
+    ex:coversTopic ex:WebDevelopment .
+
+ex:CS201 a ex:Course ;
+    rdfs:label "Data Structures and Algorithms" ;
+    ex:coversTopic ex:SoftwareEngineering .
+
+ex:CS202 a ex:Course ;
+    rdfs:label "Introduction to AI" ;
+    ex:coversTopic ex:ArtificialIntelligence .
+
+ex:CS203 a ex:Course ;
+    rdfs:label "Database Systems" ;
+    ex:coversTopic ex:DataScience .
+
+ex:CS301 a ex:Course ;
+    rdfs:label "Machine Learning" ;
+    ex:coversTopic ex:ArtificialIntelligence ;
+    ex:coversTopic ex:DataScience .
+
+ex:CS302 a ex:Course ;
+    rdfs:label "Full Stack Web Development" ;
+    ex:coversTopic ex:WebDevelopment .
+
+ex:CS303 a ex:Course ;
+    rdfs:label "Network Security" ;
+    ex:coversTopic ex:CyberSecurity .
+
+ex:CS304 a ex:Course ;
+    rdfs:label "Cloud Architecture" ;
+    ex:coversTopic ex:CloudComputing .
+
+ex:CS401 a ex:Course ;
+    rdfs:label "Deep Learning & Neural Networks" ;
+    ex:coversTopic ex:ArtificialIntelligence ;
+    ex:coversTopic ex:DataScience .
+
+ex:CS402 a ex:Course ;
+    rdfs:label "Ethical Hacking" ;
+    ex:coversTopic ex:CyberSecurity .
+
+ex:CS403 a ex:Course ;
+    rdfs:label "3D Game Engine Programming" ;
+    ex:coversTopic ex:GameDevelopment .
+
+# --- Pre-populated Students (Mock) ---
+ex:VirtualStudent a ex:Student ;
+    rdfs:label "Test User" ;
+    ex:hasCompleted ex:CS101 .
