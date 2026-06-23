@@ -10,7 +10,7 @@ app = FastAPI(title="Semantic Course Recommendation API")
 # Allow CORS for Next.js Frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For development
+    allow_origins=["http://localhost:3000", "http://localhost:3001"], # For development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -19,8 +19,10 @@ app.add_middleware(
 # Load knowledge graph
 print("Loading Knowledge Graph...")
 g = rdflib.Graph()
-# Assuming the file is run from the root directory, the ttl file is in the same directory
-g.parse("university.ttl", format="turtle")
+import os
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ttl_path = os.path.join(base_dir, "university.ttl")
+g.parse(ttl_path, format="turtle")
 print(f"Loaded {len(g)} triples.")
 
 class RecommendRequest(BaseModel):
@@ -28,7 +30,7 @@ class RecommendRequest(BaseModel):
     completed_courses: List[str] = []
 
 @app.get("/api/topics")
-def get_topics():
+async def get_topics():
     # Query all available topics from the ontology
     query = """
     PREFIX ex: <http://example.org/university#>
@@ -38,12 +40,16 @@ def get_topics():
                rdfs:label ?topicName .
     }
     """
-    results = g.query(query)
-    topics = [str(row.topicName) for row in results]
-    return {"topics": topics}
+    try:
+        results = g.query(query)
+        topics = [str(row.topicName) for row in results]
+        return {"topics": topics}
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "traceback": traceback.format_exc()}
 
 @app.get("/api/courses")
-def get_courses():
+async def get_courses():
     # Query all available courses from the ontology
     query = """
     PREFIX ex: <http://example.org/university#>
@@ -58,7 +64,7 @@ def get_courses():
     return {"courses": courses}
 
 @app.post("/api/recommend")
-def recommend_courses(req: RecommendRequest):
+async def recommend_courses(req: RecommendRequest):
     if not req.interests:
         return {"recommendations": []}
 

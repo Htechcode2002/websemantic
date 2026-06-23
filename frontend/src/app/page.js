@@ -162,7 +162,7 @@ export default function Home() {
 
               {/* Interests */}
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-3">Select Your Interests</label>
+                <label className="block text-sm font-medium text-slate-400 mb-3">Select Your Fields</label>
                 <div className="flex flex-wrap gap-2">
                   {topics.length > 0 ? topics.map((topic) => (
                     <button
